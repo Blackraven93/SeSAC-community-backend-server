@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { UsersModule } from './users/users.module';
 
@@ -15,6 +16,7 @@ import { UsersModule } from './users/users.module';
       useNewUrlParser: true,
       useUnifiedTopology: true,
     }),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

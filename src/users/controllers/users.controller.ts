@@ -1,0 +1,99 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Patch,
+  Post,
+  Put,
+  UseFilters,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { AuthService } from 'src/auth/auth.service';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
+import { CurrentUser } from 'src/common/decorators/user.decorator';
+import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
+import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
+import { UserReqeustDto } from '../dto/users.request.dto';
+import { User } from '../schema/users.schema';
+import { UsersService } from '../services/users.service';
+
+@Controller('users')
+@UseInterceptors(SuccessInterceptor)
+@UseFilters(HttpExceptionFilter)
+export class UsersController {
+  constructor(
+    private readonly UsersService: UsersService,
+    private readonly authService: AuthService,
+  ) {}
+
+  // users
+  @ApiOperation({ summary: '현재 유저 가져오기' })
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  getCurrentUser(@CurrentUser() user: User) {
+    return user.readOnlyData;
+  }
+
+  // users//all
+  @Get('all')
+  getAllUser(): string {
+    return `all Users`;
+  }
+
+  // users/:id
+  @Get(':id')
+  getUser() {
+    return 'get user';
+  }
+
+  @ApiResponse({
+    status: 500,
+    description: 'Server Error..',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '성공!!',
+    type: ReadOnlyUserDto,
+  })
+  @ApiOperation({ summary: '회원가입' })
+  @Post()
+  async signUp(@Body body: UserReqeustDto) {
+    console.log(body);
+    return this.UsersService.signUp(body);
+  }
+
+  @Post('login')
+  async login() {
+    return 'login';
+  }
+
+  @Post('logout')
+  async logout() {
+    return 'log out';
+  }
+
+  // 교체
+  @Put(':id')
+  updateUser() {
+    return 'update user';
+  }
+
+  // 부분 수정
+  @Patch('id')
+  updatePartialUser() {
+    return;
+  }
+
+  @Delete(':id')
+  deleteUser() {
+    return;
+  }
+
+  @Post('upload/users')
+  uploadUserProfileImg() {
+    return 'uploadImg';
+  }
+}
