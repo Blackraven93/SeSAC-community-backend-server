@@ -11,6 +11,14 @@ export class UsersRepository {
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
 
+  async findByIdAndUpdateImg(id: string, fileName: string) {
+    const user = await this.userModel.findById(id);
+    user.imgUrl = `http://localhost:${process.env.PORT}/media/${fileName}`;
+    const newUser = await user.save();
+    console.log(newUser);
+    return newUser.readOnlyData;
+  }
+
   async findUserByIdWithoutPassword(userId: string): Promise<User | null> {
     // 보안상의 이유로 select 뒤에 password만 제외하고 가져온다.
     // email이나 name 만 가져오고 싶은 경우 select('email name')

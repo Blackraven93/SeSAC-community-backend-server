@@ -10,12 +10,14 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AuthService } from 'src/auth/auth.service';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
+import { multerOptions } from 'src/common/utils/multer.options';
 import { ReadOnlyUserDto } from '../dto/user.dto';
 import { UserReqeustDto } from '../dto/users.request.dto';
 import { User } from '../schema/users.schema';
@@ -66,6 +68,7 @@ export class UsersController {
     return this.UsersService.signUp(body);
   }
 
+  @ApiOperation({ summary: '로그인' })
   @Post('login')
   async login() {
     return 'login';
@@ -83,7 +86,7 @@ export class UsersController {
   }
 
   // 부분 수정
-  @Patch('id')
+  @Patch(':id')
   updatePartialUser() {
     return;
   }
@@ -93,7 +96,10 @@ export class UsersController {
     return;
   }
 
-  @Post('upload/users')
+  @ApiOperation({ summary: '이미지 업로드' })
+  @UseInterceptors(FilesInterceptor('image', 10, multerOptions('users')))
+  @UseGuards(JwtAuthGuard)
+  @Post('users/:id/upload')
   uploadUserProfileImg() {
     return 'uploadImg';
   }

@@ -56,6 +56,12 @@ export class User extends Document {
   @IsNotEmpty()
   lecture: string;
 
+  @Prop({
+    default: `https://www.pikpng.com/pngl/m/80-805523_default-avatar-svg-png-icon-free-download-264157.png`,
+  })
+  @IsString()
+  imgUrl: string;
+
   readonly readOnlyData: {
     id: string;
     nickname: string;
@@ -63,6 +69,7 @@ export class User extends Document {
     phoneNumber: string;
     campus: string;
     lecture: string;
+    imgUrl: string;
   };
 }
 
@@ -76,5 +83,6 @@ UserSchema.virtual('readOnlyData').get(function (this: User) {
     phoneNumber: this.phoneNumber,
     campus: this.campus,
     lecture: this.lecture,
+    imgUrl: this.imgUrl,
   };
 });

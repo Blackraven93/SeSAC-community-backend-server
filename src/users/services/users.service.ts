@@ -45,4 +45,13 @@ export class UsersService {
     });
     return user.readOnlyData;
   }
+
+  async uploadImg(user: User, files: Express.Multer.File[]) {
+    const fileName = `users/${files[0].filename}`;
+    const newUser = await this.usersRepository.findByIdAndUpdateImg(
+      user.id,
+      fileName,
+    );
+    return newUser;
+  }
 }
