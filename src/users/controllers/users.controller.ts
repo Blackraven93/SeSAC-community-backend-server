@@ -16,6 +16,7 @@ import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
+import { ReadOnlyUserDto } from '../dto/user.dto';
 import { UserReqeustDto } from '../dto/users.request.dto';
 import { User } from '../schema/users.schema';
 import { UsersService } from '../services/users.service';
@@ -60,7 +61,7 @@ export class UsersController {
   })
   @ApiOperation({ summary: '회원가입' })
   @Post()
-  async signUp(@Body body: UserReqeustDto) {
+  async signUp(@Body() body: UserReqeustDto) {
     console.log(body);
     return this.UsersService.signUp(body);
   }

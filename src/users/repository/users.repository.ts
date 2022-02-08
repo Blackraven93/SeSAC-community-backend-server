@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Types, Model } from 'mongoose';
+import * as mongoose from 'mongoose';
 import { UserReqeustDto } from '../dto/users.request.dto';
 import { User } from '../schema/users.schema';
 
@@ -27,17 +28,18 @@ export class UsersRepository {
     return user;
   }
 
-  async existsByEmail(email: string): Promise<boolean> {
+  async existsByEmail(email: string) {
     const result = await this.userModel.exists({ email });
+    console.log(result);
     return result;
   }
 
-  async existsByPhoneNumber(phoneNumber: string): Promise<boolean> {
+  async existsByPhoneNumber(phoneNumber: string) {
     const result = await this.userModel.exists({ phoneNumber });
     return result;
   }
 
-  async existsByNickname(nickname: string): Promise<boolean> {
+  async existsByNickname(nickname: string) {
     const result = await this.userModel.exists({ nickname });
     return result;
   }

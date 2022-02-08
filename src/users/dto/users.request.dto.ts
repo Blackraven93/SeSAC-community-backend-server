@@ -8,4 +8,4 @@ export class UserReqeustDto extends PickType(User, [
   'password',
   'campus',
   'lecture',
-]) {}
+] as const) {}
