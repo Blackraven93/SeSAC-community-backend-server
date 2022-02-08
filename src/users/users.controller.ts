@@ -1,13 +1,16 @@
-import { Controller, Delete, Get, Patch, Post, Put } from '@nestjs/common';
+import { Controller, Delete, Get, Patch, Post, Put, UseFilters } from '@nestjs/common';
+import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
 import { UsersService } from './users.service';
 
 @Controller('users')
+  @UseFilters(HttpExceptionFilter)
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   // users//all
   @Get()
   getAllUser(): string {
+
     return `all Users`;
   }
 
