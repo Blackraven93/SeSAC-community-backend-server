@@ -33,10 +33,10 @@ export class UsersController {
     private readonly authService: AuthService,
   ) {}
 
-  // users
+  // users/:id
   @ApiOperation({ summary: '현재 유저 가져오기' })
   @UseGuards(JwtAuthGuard)
-  @Get()
+  @Get(':id')
   getCurrentUser(@CurrentUser() user: User) {
     return user.readOnlyData;
   }
@@ -46,12 +46,6 @@ export class UsersController {
   @Get('all')
   getAllUser() {
     return this.UsersService.getAllUser();
-  }
-
-  // users/:id
-  @Get(':id')
-  getUser() {
-    return 'get user';
   }
 
   @ApiResponse({
