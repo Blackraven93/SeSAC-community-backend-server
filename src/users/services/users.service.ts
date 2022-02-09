@@ -10,6 +10,12 @@ import { UsersRepository } from '../repository/users.repository';
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
+  async getAllUser() {
+    const allUser = await this.usersRepository.findAll();
+    const readOnlyUsers = allUser.map((user) => user.readOnlyData);
+    return readOnlyUsers;
+  }
+
   async signUp(body: UserReqeustDto) {
     const { nickname, email, password, phoneNumber, campus, lecture } = body;
 

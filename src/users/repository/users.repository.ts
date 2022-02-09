@@ -4,12 +4,21 @@ import { Types, Model } from 'mongoose';
 import * as mongoose from 'mongoose';
 import { UserReqeustDto } from '../dto/users.request.dto';
 import { User } from '../schema/users.schema';
+import { CommentsSchema } from 'src/comments/schema/comments.schema';
 
 Injectable();
 export class UsersRepository {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
+
+  async findAll() {
+    const commentsModel = mongoose.model('comments', CommentsSchema);
+    const result = await this.userModel
+      .find()
+      .populate('comments', commentsModel);
+    return result;
+  }
 
   async findByIdAndUpdateImg(id: string, fileName: string) {
     const user = await this.userModel.findById(id);
@@ -19,7 +28,9 @@ export class UsersRepository {
     return newUser.readOnlyData;
   }
 
-  async findUserByIdWithoutPassword(userId: string): Promise<User | null> {
+  async findUserByIdWithoutPassword(
+    userId: string | Types.ObjectId,
+  ): Promise<User | null> {
     // 보안상의 이유로 select 뒤에 password만 제외하고 가져온다.
     // email이나 name 만 가져오고 싶은 경우 select('email name')
     const user = await this.userModel.findById(userId).select('-password');

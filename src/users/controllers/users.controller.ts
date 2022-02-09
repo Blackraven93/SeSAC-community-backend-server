@@ -6,6 +6,7 @@ import {
   Patch,
   Post,
   Put,
+  UploadedFiles,
   UseFilters,
   UseGuards,
   UseInterceptors,
@@ -41,9 +42,10 @@ export class UsersController {
   }
 
   // users//all
+  @ApiOperation({ summary: '모든 유저 가져오기' })
   @Get('all')
-  getAllUser(): string {
-    return `all Users`;
+  getAllUser() {
+    return this.UsersService.getAllUser();
   }
 
   // users/:id
@@ -100,7 +102,10 @@ export class UsersController {
   @UseInterceptors(FilesInterceptor('image', 10, multerOptions('users')))
   @UseGuards(JwtAuthGuard)
   @Post('users/:id/upload')
-  uploadUserProfileImg() {
-    return 'uploadImg';
+  uploadUserProfileImg(
+    @UploadedFiles() files: Array<Express.Multer.File>,
+    @CurrentUser() user: User,
+  ) {
+    return this.UsersService.uploadImg(user, files);
   }
 }
